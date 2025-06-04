@@ -1,3 +1,6 @@
 [submodule "mobile-verifier-dapp/lib/forge-std"]
 	path = mobile-verifier-dapp/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
+[submodule "mobile-verifier-dapp/lib/chainlink-brownie-contracts"]
+	path = mobile-verifier-dapp/lib/chainlink-brownie-contracts
+	url = https://github.com/smartcontractkit/chainlink-brownie-contracts
