@@ -1,0 +1,3 @@
+[submodule "mobile-verifier-dapp/lib/forge-std"]
+	path = mobile-verifier-dapp/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
