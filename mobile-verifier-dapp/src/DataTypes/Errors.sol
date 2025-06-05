@@ -13,6 +13,7 @@ library ErrorLib{
     error Manager_Token_Already_Added();
     error Manager__Oracle_already_Added();
     error Manager__OnlyEntryPoint();
+    error Entry__not_Registered();
 
 
     //////permission/////
