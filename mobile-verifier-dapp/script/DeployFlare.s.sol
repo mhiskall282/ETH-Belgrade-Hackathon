@@ -2,6 +2,7 @@
 pragma solidity ^0.8.20;
 
 import "forge-std/Script.sol";
+import "./DeployConfig.s.sol";
 import "../src/RandomnessGame.sol";
 import "../src/TransactionVerifier.sol";
 import "../src/UserProfile.sol";
@@ -9,20 +10,17 @@ import "../src/VendorRegistry.sol";
 import "../src/YieldVault.sol";
 
 contract DeployFlareScript is Script {
-    // Flare VRF Coordinator addresses
-    address constant FLARE_VRF_COORDINATOR = 0x0000000000000000000000000000000000000000; // Replace with actual address
-    bytes32 constant FLARE_KEY_HASH = 0x0000000000000000000000000000000000000000000000000000000000000000; // Replace with actual key hash
-    uint64 constant FLARE_SUBSCRIPTION_ID = 0; // Replace with your subscription ID
+    using DeployConfig for *;
 
     function run() public {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
 
-        // Deploy RandomnessGame
+        // Deploy RandomnessGame with Flare VRF config
         RandomnessGame randomnessGame = new RandomnessGame(
-            FLARE_VRF_COORDINATOR,
-            FLARE_KEY_HASH,
-            FLARE_SUBSCRIPTION_ID
+            DeployConfig.FLARE_VRF.coordinator,
+            DeployConfig.FLARE_VRF.keyHash,
+            DeployConfig.FLARE_VRF.subscriptionId
         );
 
         // Deploy TransactionVerifier
@@ -40,10 +38,37 @@ contract DeployFlareScript is Script {
         vm.stopBroadcast();
 
         // Log deployed addresses
+        console.log("Network: Flare");
+        console.log("Chain ID:", DeployConfig.FLARE_CHAIN_ID);
         console.log("RandomnessGame deployed to:", address(randomnessGame));
         console.log("TransactionVerifier deployed to:", address(transactionVerifier));
         console.log("UserProfile deployed to:", address(userProfile));
         console.log("VendorRegistry deployed to:", address(vendorRegistry));
         console.log("YieldVault deployed to:", address(yieldVault));
+
+        // Verify contracts if enabled
+        if (DeployConfig.FLARE_VERIFY.verify) {
+            console.log("\nVerifying contracts...");
+            verifyContract("RandomnessGame", address(randomnessGame));
+            verifyContract("TransactionVerifier", address(transactionVerifier));
+            verifyContract("UserProfile", address(userProfile));
+            verifyContract("VendorRegistry", address(vendorRegistry));
+            verifyContract("YieldVault", address(yieldVault));
+        }
+    }
+
+    function verifyContract(string memory name, address deployedAddress) internal {
+        string memory command = string(abi.encodePacked(
+            "forge verify-contract ",
+            deployedAddress,
+            " src/",
+            name,
+            ".sol:",
+            name,
+            " --chain-id ",
+            vm.toString(DeployConfig.FLARE_CHAIN_ID),
+            " --watch"
+        ));
+        vm.ffi(command);
     }
 }
