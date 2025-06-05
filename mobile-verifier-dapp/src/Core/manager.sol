@@ -21,6 +21,8 @@ bytes defaultProAdmin = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266;
 
 uint256 minAmount = 1e18;
 uint256 cap;
+uint256 minbetAmount;
+uint256 maxbetAmount;
 
 ///mapping
 mapping(address => tokenImfo) public tokenAddressToInfo;
@@ -70,6 +72,13 @@ function setMinDeposit(uint256 _min) public OnlyManager{
 
     function setCap(uint256 _newCap) external OnlyManager{
         cap = _newCap;
+        emit CapUpdated(_newCap);
+    }
+
+    
+    function setCaponbet(uint256 _minbetAmount, uint256 _maxbetAmount) external OnlyManager{
+       minbetAmount = _minbetAmount;
+       maxbetAmount = _maxbetAmount;
         emit CapUpdated(_newCap);
     }
 

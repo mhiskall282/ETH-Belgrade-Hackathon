@@ -37,7 +37,7 @@ contract RankNFT is ERC721, IRankNFT{
         _nextTokenId = 1;
     }
 
-    function mintRankNFT(address to, uint256 winCount, uint256 playCount) external onlyGameContract {
+    function mintRankNFT(address to, uint256 winCount, uint256 playCount, address rankNFTaddr) external onlyGameContract {
         // Ensure user is registered via EntryPoint (you can handle validation as needed)
         (, , ,) = entryPoint.getUserInfo(to); // just to validate user exists
 

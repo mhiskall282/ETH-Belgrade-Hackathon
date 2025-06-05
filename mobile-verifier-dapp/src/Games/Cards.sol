@@ -6,8 +6,12 @@ import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/AutomationCompatibleInterface.sol";
 import "@flarenetwork/flare-periphery-contracts/stateConnector/StateConnector.sol";
 import {IRankNFT} from "../Interface/Games/IRankNFT.sol";
+import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import{IEntry} from "../Core/Entry.sol";
 
 contract TwentyOneCrossChain is VRFConsumerBaseV2, AutomationCompatibleInterface {
+    using SafeERC20 for IERC20;
     // Game Structures
     struct GameSession {
         address player;
@@ -17,6 +21,7 @@ contract TwentyOneCrossChain is VRFConsumerBaseV2, AutomationCompatibleInterface
         uint256[] availableCards;
         bool inProgress;
         uint256 lastActionTime;
+        address _rankNFTaddr;
     }
 
     // Chainlink VRF
@@ -33,14 +38,21 @@ contract TwentyOneCrossChain is VRFConsumerBaseV2, AutomationCompatibleInterface
     
     // Flare State Connector
     StateConnector public immutable stateConnector;
+
+
+    // Game Configuration
+    address public _gameToken;
     
     // Game State
     mapping(address => GameSession) public activeGames;
     mapping(address => uint256) public playerBalances;
     uint256 public houseBalance;
-    uint256 public minBet = 0.1 ether;
-    uint256 public maxBet = 10 ether;
-    
+  
+  uint256 gamesPlayedCount = 1;
+  uint256 gamesWonCount = 1;
+    IRankNFT public rankNFT;
+    IEntry public entryPoint;
+
     // Events
     event GameStarted(address indexed player, uint256 betAmount);
     event CardDrawn(address indexed player, uint256 cardValue);
@@ -54,28 +66,33 @@ contract TwentyOneCrossChain is VRFConsumerBaseV2, AutomationCompatibleInterface
         bytes32 _gasLane,
         uint32 _callbackGasLimit,
         address _stateConnector
+        address _rankNFT,
+        address _gameToken,
+        address _entryPoint
     ) VRFConsumerBaseV2(_vrfCoordinator) {
         vrfCoordinator = VRFCoordinatorV2Interface(_vrfCoordinator);
         subscriptionId = _subscriptionId;
         gasLane = _gasLane;
         callbackGasLimit = _callbackGasLimit;
         stateConnector = StateConnector(_stateConnector);
+        rankNFT = IRankNFT(_rankNFT);
+        gameToken = _gameToken;
+        entryPoint = IEntry(_entryPoint);
     }
 
     // Start a new game with a bet
-    function startGame(uint256 betAmount) external payable {
-        require(betAmount >= minBet && betAmount <= maxBet, "Invalid bet amount");
-        require(msg.value == betAmount, "Incorrect ETH amount");
+    function startGame(uint256 betAmount) external onlyEntryPoint {
+       IERC20(_gameToken).safeTransferFrom(msg.sender, address(this), betAmount);
         require(activeGames[msg.sender].player == address(0), "Game already in progress");
 
-        // Initialize game session
+       
         GameSession storage session = activeGames[msg.sender];
         session.player = msg.sender;
         session.betAmount = betAmount;
         session.inProgress = true;
         session.lastActionTime = block.timestamp;
         
-        // Initialize deck
+       
         for (uint256 i = 1; i <= 52; i++) {
             session.availableCards.push(i);
         }
@@ -100,7 +117,7 @@ contract TwentyOneCrossChain is VRFConsumerBaseV2, AutomationCompatibleInterface
         
         // Deal initial cards
         _drawCard(player, randomWords[0]);
-        _drawCard(player, randomWords[0] >> 8);
+        _drawCard(player, randomWords[0] >> 8); // shift right
         
         // Second card for dealer (face down)
         _drawDealerCard(player, randomWords[0] >> 16);
@@ -284,15 +301,20 @@ contract TwentyOneCrossChain is VRFConsumerBaseV2, AutomationCompatibleInterface
 
     function _endGame(address player, bool playerWon) internal {
         GameSession storage session = activeGames[player];
-        
+         _gamesPlayedCount= gamesPlayedCount++
         // Payout
         if (playerWon) {
             uint256 payout = session.betAmount * 2;
             playerBalances[player] += payout;
             houseBalance -= payout;
+             rankNFTaddr = CloneNFT();
+             session._rankNFTaddr = rankNFTaddr;
+            mintRankNFT(session.player, gamesWonCount++, _gamesPlayedCount);
+            IERC20(_gameToken).safeTransfer(player, payout);
             emit GameResult(player, true, payout);
         } else {
             houseBalance += session.betAmount;
+
             emit GameResult(player, false, 0);
         }
         
@@ -309,7 +331,9 @@ contract TwentyOneCrossChain is VRFConsumerBaseV2, AutomationCompatibleInterface
         emit CrossChainUpdate(player, updateHash);
         
         // Clean up
-        delete activeGames[player];
+        // delete activeGames[player];
+        //dont delete, just reset
+        session.inProgress = false;
     }
     
     // Cross-chain verification functions
@@ -318,5 +342,22 @@ contract TwentyOneCrossChain is VRFConsumerBaseV2, AutomationCompatibleInterface
         bytes memory proof
     ) public view returns (bool) {
         return stateConnector.verifyMessageHash(updateHash, proof);
+    }
+
+    function mintRankNFT(address to, uint256 _gamesWonCount, uint256 _gamesPlayedCount, rankNFtadd) internal {
+     
+        // Mint NFT based on game stats
+        rankNFT.mintRankNFT(to, _gamesWonCount, _gamesPlayedCount, rankNFtaddr);  
+    }
+
+    function CloneNFT()internal returns(address) {
+        // Clone the NFT contract
+        address clone = address(new IRankNFT());
+        return clone;
+    }
+
+        modifier onlyEntryPoint() {
+        require(msg.sender == entryPoint, "Only EntryPoint");
+        _;
     }
 }

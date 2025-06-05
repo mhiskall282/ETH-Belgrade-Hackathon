@@ -12,7 +12,7 @@ interface I {
     /// @param to The address receiving the NFT
     /// @param winCount Total number of wins
     /// @param playCount Total number of games played
-    function mintRankNFT(address to, uint256 winCount, uint256 playCount) external;
+    function mintRankNFT(address to, uint256 winCount, uint256 playCount, address rankNFTaddr) external;
 
     /// @notice Get all NFT token IDs that have been minted
     /// @return An array of token IDs
