@@ -18,4 +18,12 @@ struct UserInfoMation{
     uint256 balance;
     uint256 tokenBalance;
 }
+
+ struct Transaction {
+        address sender;
+        address receiver;
+        uint256 amount;
+        uint256 timestamp;
+        string reference; 
+    }
 }

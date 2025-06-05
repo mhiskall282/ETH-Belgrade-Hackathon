@@ -97,8 +97,11 @@ function decreaseBlance(address user, uint256 amount) public {
     userStuff[user].balance -= amount;
 }
 
-function getUserInfo(address user) public view returns(infoForUser memory){
-    return userStuff[user];
+function getUserInfo(address user) public view returns(address, uint256, uint256) {
+    require(userStuff[user].mAddr != address(0), ErrorLib.Entry__not_Registered());
+    // Return the user information
+    infoForUser memory userInfo = userStuff[user];
+    return (userInfo.mAddr, userInfo.balance, userInfo.tokenBalance);
 
 }
 

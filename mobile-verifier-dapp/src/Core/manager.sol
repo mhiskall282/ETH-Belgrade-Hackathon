@@ -4,7 +4,7 @@ pragma solidity 0.8.26;
 import{PermissionImp} from "../src/Permision/Permissioninfo.sol";
 import{ErrorLib} from "../DataTypes/Errors.sol";
 import{Structss} from "../DataTypes/Structs.sol";
-import{Entry} from "../Core/Entry.sol";
+import{IEntry} from "../Core/Entry.sol";
 import {IManager} from "../Interface/Core/Imanager.sol";
 
 contract Manager is  IManager, PermissionImp{
