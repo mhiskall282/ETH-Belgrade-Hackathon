@@ -10,7 +10,8 @@ import {
   ShieldCheck,
   Leaf,
   Vote,
-  Sparkles
+  Sparkles,
+  Gamepad2Icon
 } from 'lucide-react';
 
 interface NavItem {
@@ -63,6 +64,11 @@ export function ResponsiveNavigation({ logo, ThemeToggle }: ResponsiveNavigation
       href: '/lite',
       icon: <Sparkles size={20} />,
     },
+    {
+      label: 'Games',
+      href: '/game',
+      icon: <Gamepad2Icon size={20} />,
+    },
   ];
 
   return (
@@ -71,7 +77,9 @@ export function ResponsiveNavigation({ logo, ThemeToggle }: ResponsiveNavigation
       <nav className="hidden md:fixed md:top-0 md:left-0 md:right-0 md:z-50 md:flex md:items-center md:justify-between md:border-b md:border-border/40 md:bg-background/80 md:px-6 md:py-4 md:backdrop-blur-md">
         {/* Logo */}
         <div className="flex items-center">
-          {logo || <div className="text-xl font-bold">Logo</div>}
+          <Link href="/" className="flex items-center">
+            {logo || <div className="text-xl font-bold">Logo</div>}
+          </Link>
         </div>
 
         {/* Navigation Items */}

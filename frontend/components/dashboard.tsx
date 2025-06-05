@@ -177,7 +177,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onGoToLiteMode }) => {
               <h3 className="font-semibold">iExec Data Protection</h3>
               <Badge variant="secondary">Powered by iExec</Badge>
             </div>
-            <Button size="sm" variant="ghost" className="text-secondary text-white">
+            <Button size="sm" variant="ghost" className="text-secondary">
               View All
             </Button>
           </div>
@@ -222,7 +222,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onGoToLiteMode }) => {
                   <p className="font-medium text-sm">iExec Confidential Computing</p>
                   <p className="text-xs text-muted-foreground">Process data without exposing it</p>
                 </div>
-                <Button size="sm" variant="outline" className="border-secondary text-secondary text-white">
+                <Button size="sm" variant="outline" className="border-secondary text-secondary">
                   Configure
                 </Button>
               </div>
