@@ -105,6 +105,6 @@ function getUserInfo(address user) public view returns(infoForUser memory){
 function getBalanceOf(address user, address tokenAddress) public view returns(uint256){
     IERC20 tokenAddr = IERC20(tokenAddress);
     return tokenAddr.balanceOf(user);
-   
+}
 
 }
