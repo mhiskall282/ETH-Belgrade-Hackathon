@@ -8,9 +8,11 @@ import "@flarenetwork/flare-periphery-contracts/stateConnector/StateConnector.so
 import {IRankNFT} from "../Interface/Games/IRankNFT.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import{IEntry} from "../Core/Entry.sol";
 
-contract TwentyOneCrossChain is VRFConsumerBaseV2, AutomationCompatibleInterface {
+import {IEntry} from "../Interface/Core/IEntry.sol";
+import{IGameContractCrossChain} from "../Interface/Games/IGameContractCrossChain.sol";
+
+contract GameContractCrossChain is IGameContractCrossChain, VRFConsumerBaseV2, AutomationCompatibleInterface {
     using SafeERC20 for IERC20;
     // Game Structures
     struct GameSession {

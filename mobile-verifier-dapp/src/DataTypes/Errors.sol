@@ -14,6 +14,7 @@ library ErrorLib{
     error Manager__Oracle_already_Added();
     error Manager__OnlyEntryPoint();
     error Entry__not_Registered();
+    error Entry_betAmountTooBig();
 
 
     //////permission/////

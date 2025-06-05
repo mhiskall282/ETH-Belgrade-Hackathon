@@ -8,17 +8,19 @@ import{IFarm} from "../Interface/Aave/IFarm.sol";
 import {Token} from "../Token/token.sol";
 import {Clones} from "@openzeppelin/contracts/proxy/Clones.sol";
 import {IswapManager} from "../Interface/Core/Iswapmanager.sol";
+import{IGameContractCrossChain} from "../Interface/Games/IGameContractCrossChain.sol";
 contract Entry{
 
 IFarm public farm;
 IManager public manager;
+IGameContractCrossChain public gameContract;
 Token public token;
 ISwapManager public swapManager;
 Structss.UserInfoMation infoForUser;
 mapping(address => infoForUser) private userStuff;
 
 
-constructor(address _manager, address _farm, address _token, address _swapManager) {
+constructor(address _manager, address _farm, address _token, address _swapManager, address _gameContract) {
     require(_manager != address(0), ErrorLib.Entry__Zero_Address());
     require(_farm != address(0), ErrorLib.Entry__Zero_Address());
     require(_token != address(0), ErrorLib.Entry__Zero_Address());
@@ -26,6 +28,7 @@ constructor(address _manager, address _farm, address _token, address _swapManage
     token = Token(_token);
     farm = IFarm(_farm);
     swapManager = IswapManager(_swapManager);
+    gameContract = IGameContractCrossChain(_gameContract);
 }
 
  function registerUser() public{
@@ -69,14 +72,39 @@ function swapTokens(address tokenIn, address tokenOut, uint256 amountIn, uint256
     swapManager.swapExactInputSingle(
         tokenIn,
         tokenOut,
-        tier, // Example fee tier
+        tier, 
         amountIn,
         minAmountOut,
-       deadline, // 5 minutes deadline
+       deadline, 
         receiverAddr
     );
    
 }
+
+//////////////////////////game//////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+
+function startGame(uint256 _betamount)public {
+    require(userStuff[msg.sender].mAddr != address(0), ErrorLib.Entry__not_Registered());
+    require(_betamount > manager.getminbetAmount(), ErrorLib.Entry__bet_Amount_Cannot_Be_Zero());
+    require(_betamount <=manager.getmaxbetAmount(), ErrorLib.Entry_betAmountTooBig());
+
+    
+    gameContract.startGame(_betamount);
+    
+}
+
+function hit() public{
+   
+    gameContract.hit();
+}
+
+function stand() public{
+   
+    gameContract.stand();
+}
+
+/////////////////////////////////////////////////////////////////////////
 
 function activate(address UserAdminAddress)  internal returns(address mAddr){
       mAddr = Clones.clone(manager(UserAdminAddress));

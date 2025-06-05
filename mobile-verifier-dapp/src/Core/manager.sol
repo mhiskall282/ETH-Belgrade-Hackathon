@@ -87,6 +87,15 @@ function setUserRolesGoverner(bytes _userGov) public CancallOnUser {
     require(_userGov != bytes(0), ErrorLib.Manager__UserGov_Connot_be_Zero());
     UserGov = _userGov;
 }
+function getminbetAmount() public view returns(uint256){
+    return minbetAmount;
+}
+function getmaxbetAmount() public view returns(uint256){
+    return maxbetAmount;
+}
+function getMinAmount() public view returns(uint256){
+    return minAmount;
+}
 
 
 modifier OnlyManager() {
