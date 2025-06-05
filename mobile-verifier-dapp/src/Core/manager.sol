@@ -5,8 +5,9 @@ import{PermissionImp} from "../src/Permision/Permissioninfo.sol";
 import{ErrorLib} from "../DataTypes/Errors.sol";
 import{Structss} from "../DataTypes/Structs.sol";
 import{Entry} from "../Core/Entry.sol";
+import {IManager} from "../Interface/Core/Imanager.sol";
 
-contract Manager is PermissionImp{
+contract Manager is  IManager, PermissionImp{
     Entry entryPoint;
 Structss.TokenInfo tokenImfo;
 bytes manager = abi.encodePacked(keccak256("manager"));
@@ -19,6 +20,7 @@ bytes defaultProAdmin = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266;
 ////state variables////
 
 uint256 minAmount = 1e18;
+uint256 cap;
 
 ///mapping
 mapping(address => tokenImfo) public tokenAddressToInfo;
@@ -65,6 +67,11 @@ function setMinDeposit(uint256 _min) public OnlyManager{
     require(_min > 0, ErrorLib.Manager__UserGov_Connot_be_Zero());
     minAmount  = _min;
 }
+
+    function setCap(uint256 _newCap) external OnlyManager{
+        cap = _newCap;
+        emit CapUpdated(_newCap);
+    }
 
 ////OnlyUser Can cahange this//////
 function setUserRolesGoverner(bytes _userGov) public CancallOnUser {
