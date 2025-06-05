@@ -82,11 +82,11 @@ export default function HomePage() {
             <Badge className="absolute -top-4 -right-4 bg-secondary text-secondary-foreground">
               Powered by iExec
             </Badge>
-            <div className="relative h-96 w-full rounded-xl overflow-hidden shadow-lg border bg-muted">
+            {/* <div className="relative h-96 w-full rounded-xl overflow-hidden shadow-lg border bg-muted">
               <div className="flex items-center justify-center h-full text-muted-foreground">
                 App Screenshot
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>

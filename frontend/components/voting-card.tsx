@@ -174,7 +174,7 @@ export function VotingCard({ className }: VotingCardProps) {
                           <span>{option.votes.toLocaleString()} votes</span>
                         </div>
                         <Progress 
-                          value={(option.votes / event.totalVotes) * 100} 
+                          value={event.totalVotes > 0 ? (option.votes / event.totalVotes) * 100 : 0} 
                           className={cn(
                             "h-1.5",
                             option.userVoted && "bg-primary/20"
