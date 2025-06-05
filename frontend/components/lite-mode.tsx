@@ -23,7 +23,6 @@ import {
   Shield,
   Lock
 } from 'lucide-react';
-import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { cn } from '@/lib/utils';
 
 interface Account {
@@ -114,7 +113,6 @@ export function LiteMode() {
             Lite Mode
           </h1>
         </div>
-        <ThemeToggle />
       </div>
       
       <Card className="mb-6 border-0 bg-gradient-to-br from-primary/20 via-primary/10 to-secondary/5">

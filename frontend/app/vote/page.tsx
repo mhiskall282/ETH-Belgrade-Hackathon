@@ -1,4 +1,3 @@
-import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { VotingCard } from '@/components/voting-card';
 
 export default function VotePage() {
@@ -6,7 +5,6 @@ export default function VotePage() {
     <div className="container mx-auto max-w-lg p-4 pb-20">
       <div className="mb-6 flex items-center justify-between pt-4">
         <h1 className="text-xl font-bold">Conditional Voting</h1>
-        <ThemeToggle />
       </div>
       
       <VotingCard />

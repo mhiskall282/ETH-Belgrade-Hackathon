@@ -149,7 +149,7 @@ export function BalanceCard({ className }: BalanceCardProps) {
             <span className="text-xs">Approve</span>
           </Button>
           <Link href="/lite">
-            <Button variant="outline" size="sm" className="flex h-full w-full flex-col gap-1 py-4">
+            <Button variant="outline" size="sm" className="flex h-full w-full flex-row gap-4 py-2">
               <Sparkles size={16} />
               <span className="text-xs">Lite</span>
             </Button>

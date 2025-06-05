@@ -1,4 +1,3 @@
-import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { MessageList } from '@/components/message-list';
 
 export default function MessagesPage() {
@@ -6,7 +5,6 @@ export default function MessagesPage() {
     <div className="container mx-auto max-w-lg p-4 pb-20">
       <div className="mb-6 flex items-center justify-between pt-4">
         <h1 className="text-xl font-bold">Messages</h1>
-        <ThemeToggle />
       </div>
       
       <MessageList />

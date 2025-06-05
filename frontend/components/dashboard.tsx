@@ -24,9 +24,9 @@ interface DashboardProps {
 
 export const Dashboard: React.FC<DashboardProps> = ({ onGoToLiteMode }) => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 mt-16">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold">Dashboard</h2>
+        <h2 className="text-xl font-bold"></h2>
         <Button 
           size="sm" 
           variant="secondary"
@@ -177,7 +177,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onGoToLiteMode }) => {
               <h3 className="font-semibold">iExec Data Protection</h3>
               <Badge variant="secondary">Powered by iExec</Badge>
             </div>
-            <Button size="sm" variant="ghost" className="text-secondary">
+            <Button size="sm" variant="ghost" className="text-secondary text-white">
               View All
             </Button>
           </div>
@@ -222,7 +222,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onGoToLiteMode }) => {
                   <p className="font-medium text-sm">iExec Confidential Computing</p>
                   <p className="text-xs text-muted-foreground">Process data without exposing it</p>
                 </div>
-                <Button size="sm" variant="outline" className="border-secondary text-secondary">
+                <Button size="sm" variant="outline" className="border-secondary text-secondary text-white">
                   Configure
                 </Button>
               </div>
