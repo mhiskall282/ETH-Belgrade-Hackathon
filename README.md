@@ -1,7 +1,5 @@
 # ETH-Belgrade-Hackathon
 
-![DeFi Cross-Chain Gaming Platform](https://example.com/logo.png)
-
 A cross-chain DeFi gaming platform with mobile verification capabilities, built during the ETH Belgrade Hackathon. This project combines DeFi yield farming, blockchain gaming, and cross-chain functionality with a focus on security and user experience.
 
 ## About
@@ -109,7 +107,7 @@ The project is structured into three main components:
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/ETH-Belgrade-Hackathon.git
+git clone https://github.com/mhiskall282/ETH-Belgrade-Hackathon.git
 cd ETH-Belgrade-Hackathon
 ```
 
